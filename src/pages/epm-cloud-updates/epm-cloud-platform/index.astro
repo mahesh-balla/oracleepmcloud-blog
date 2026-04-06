@@ -1,15 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../../components/FormattedDate.astro';
-import { PRODUCTS, SUBCATEGORIES } from '../../../consts';
+import { PRODUCTS, SUBCATEGORIES, getSubcategoriesForProduct } from '../../../consts';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 
 const product = PRODUCTS.find((p) => p.slug === 'epm-cloud-updates')!;
-const subcategory = SUBCATEGORIES.find((s) => s.slug === 'tips')!;
+const subcategory = SUBCATEGORIES.find((s) => s.slug === 'epm-cloud-platform')!;
 const articles = (
 	await getCollection(
 		'articles',
-		({ data }) => data.product === 'epm-cloud-updates' && data.subcategory === 'tips',
+		({ data }) => data.product === 'epm-cloud-updates' && data.subcategory === 'epm-cloud-platform',
 	)
 ).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
@@ -29,7 +29,7 @@ const articles = (
 	</div>
 
 	<nav class="subcategory-nav">
-		{SUBCATEGORIES.map((sub) => (
+		{getSubcategoriesForProduct(product.slug).map((sub) => (
 			<a
 				href={`/${product.slug}/${sub.slug}/`}
 				class:list={['sub-pill', { active: sub.slug === subcategory.slug }]}

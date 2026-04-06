@@ -5,7 +5,7 @@ import BlogPost from '../../../layouts/BlogPost.astro';
 export async function getStaticPaths() {
 	const posts = await getCollection(
 		'articles',
-		({ data }) => data.product === 'epm-cloud-updates' && data.subcategory === 'tips',
+		({ data }) => data.product === 'epm-cloud-updates' && data.subcategory === 'epm-cloud-platform',
 	);
 	return posts.map((post) => ({
 		params: { slug: post.id },

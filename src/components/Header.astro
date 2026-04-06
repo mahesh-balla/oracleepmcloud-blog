@@ -1,5 +1,5 @@
 ---
-import { PRODUCTS, SITE_TITLE, SUBCATEGORIES } from '../consts';
+import { PRODUCTS, SITE_TITLE, getSubcategoriesForProduct } from '../consts';
 import HeaderLink from './HeaderLink.astro';
 ---
 
@@ -24,7 +24,7 @@ import HeaderLink from './HeaderLink.astro';
 						<div class="dropdown">
 							<HeaderLink href={`/${product.slug}/`}>{product.name}</HeaderLink>
 							<div class="dropdown-content">
-								{SUBCATEGORIES.map((sub) => (
+								{getSubcategoriesForProduct(product.slug).map((sub) => (
 									<a href={`/${product.slug}/${sub.slug}/`}>{sub.name}</a>
 								))}
 							</div>

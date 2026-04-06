@@ -35,7 +35,30 @@ export const SUBCATEGORIES = [
 		slug: 'latest-release',
 		description: 'What is new in the latest release',
 	},
+	{
+		name: 'Previous Releases Summary',
+		slug: 'previous-releases-summary',
+		description: 'Summary and archive of past EPM Cloud releases',
+	},
+	{
+		name: 'EPM Cloud Platform',
+		slug: 'epm-cloud-platform',
+		description: 'Core platform features, architecture, and capabilities',
+	},
 ] as const;
 
 export type ProductSlug = (typeof PRODUCTS)[number]['slug'];
 export type SubcategorySlug = (typeof SUBCATEGORIES)[number]['slug'];
+
+/** Product-specific subcategory ordering */
+export const PRODUCT_SUBCATEGORIES: Record<ProductSlug, SubcategorySlug[]> = {
+	'epm-cloud-updates': ['latest-release', 'previous-releases-summary', 'epm-cloud-platform', 'tutorials'],
+	'narrative-reporting': ['tutorials', 'tips', 'use-cases', 'latest-release'],
+	'planning-cloud': ['tutorials', 'tips', 'use-cases', 'latest-release'],
+};
+
+/** Helper: get the full subcategory objects for a given product */
+export function getSubcategoriesForProduct(productSlug: ProductSlug) {
+	const slugs = PRODUCT_SUBCATEGORIES[productSlug];
+	return slugs.map((s) => SUBCATEGORIES.find((sub) => sub.slug === s)!);
+}

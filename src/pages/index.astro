@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import FormattedDate from '../components/FormattedDate.astro';
-import { PRODUCTS, SITE_DESCRIPTION, SITE_TITLE, SUBCATEGORIES } from '../consts';
+import { PRODUCTS, SITE_DESCRIPTION, SITE_TITLE, getSubcategoriesForProduct } from '../consts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const allArticles = (await getCollection('articles')).sort(
@@ -36,7 +36,7 @@ const recentArticles = allArticles.slice(0, 6);
 						</h3>
 						<p>{product.description}</p>
 						<ul class="tag-list">
-							{SUBCATEGORIES.map((sub) => (
+							{getSubcategoriesForProduct(product.slug).map((sub) => (
 								<li>
 									<a href={`/${product.slug}/${sub.slug}/`}>{sub.name}</a>
 								</li>

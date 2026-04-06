@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../../components/FormattedDate.astro';
-import { PRODUCTS, SUBCATEGORIES } from '../../../consts';
+import { PRODUCTS, SUBCATEGORIES, getSubcategoriesForProduct } from '../../../consts';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 
 const product = PRODUCTS.find((p) => p.slug === 'narrative-reporting')!;
@@ -29,7 +29,7 @@ const articles = (
 	</div>
 
 	<nav class="subcategory-nav">
-		{SUBCATEGORIES.map((sub) => (
+		{getSubcategoriesForProduct(product.slug).map((sub) => (
 			<a
 				href={`/${product.slug}/${sub.slug}/`}
 				class:list={['sub-pill', { active: sub.slug === subcategory.slug }]}
