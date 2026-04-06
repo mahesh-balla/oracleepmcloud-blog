@@ -25,40 +25,27 @@ const subcategoryInfo = SUBCATEGORIES.find((s) => s.slug === subcategory);
 			}
 			.hero-image {
 				width: 100%;
+				max-width: 960px;
+				margin: 0 auto;
+				padding: 0 1em;
 			}
 			.hero-image img {
 				display: block;
 				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
+				border-radius: var(--radius-lg);
+				box-shadow: var(--box-shadow-lg);
 			}
 			.prose {
 				width: 720px;
 				max-width: calc(100% - 2em);
 				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
+				padding: 1.5em 1em;
+				color: var(--oracle-charcoal);
 			}
 			.breadcrumb {
-				margin-bottom: 1em;
-				font-size: 0.9em;
-				color: rgb(var(--gray));
+				font-size: 0.85em;
+				color: var(--oracle-warm-gray);
+				margin-bottom: 1.5em;
 			}
 			.breadcrumb a {
 				color: var(--accent);
@@ -66,6 +53,33 @@ const subcategoryInfo = SUBCATEGORIES.find((s) => s.slug === subcategory);
 			}
 			.breadcrumb a:hover {
 				text-decoration: underline;
+			}
+			.breadcrumb .sep {
+				margin: 0 0.35em;
+				opacity: 0.4;
+			}
+			.title {
+				margin-bottom: 1.5em;
+				padding: 1em 0;
+				text-align: center;
+				line-height: 1;
+			}
+			.title h1 {
+				margin: 0 0 0.5em 0;
+				color: var(--oracle-charcoal);
+			}
+			.date {
+				margin-bottom: 0.5em;
+				color: var(--oracle-warm-gray);
+				font-size: 0.9em;
+			}
+			.last-updated-on {
+				font-style: italic;
+			}
+			hr {
+				margin: 1em auto;
+				max-width: 80px;
+				border-top: 3px solid var(--accent);
 			}
 		</style>
 	</head>
@@ -81,8 +95,8 @@ const subcategoryInfo = SUBCATEGORIES.find((s) => s.slug === subcategory);
 					{
 						product && subcategory && (
 							<nav class="breadcrumb">
-								<a href="/">Home</a> &rsaquo;
-								<a href={`/${product}/`}>{productInfo?.name}</a> &rsaquo;
+								<a href="/">Home</a> <span class="sep">/</span>
+								<a href={`/${product}/`}>{productInfo?.name}</a> <span class="sep">/</span>
 								<a href={`/${product}/${subcategory}/`}>{subcategoryInfo?.name}</a>
 							</nav>
 						)

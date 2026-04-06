@@ -4,48 +4,91 @@ const today = new Date();
 ---
 
 <footer>
-	<div class="footer-grid">
-		{
-			PRODUCTS.map((product) => (
-				<div class="footer-column">
-					<h4>
-						<a href={`/${product.slug}/`}>{product.name}</a>
-					</h4>
-					<ul>
-						{SUBCATEGORIES.map((sub) => (
-							<li>
-								<a href={`/${product.slug}/${sub.slug}/`}>{sub.name}</a>
-							</li>
-						))}
-					</ul>
-				</div>
-			))
-		}
-	</div>
-	<div class="copyright">
-		&copy; {today.getFullYear()} oracleepmcloud.com. All rights reserved.
+	<div class="footer-inner">
+		<div class="footer-grid">
+			<div class="footer-brand">
+				<span class="footer-logo">
+					<span class="logo-mark">EPM</span>
+					Oracle EPM Cloud Blog
+				</span>
+				<p>Your go-to resource for Oracle EPM Cloud tutorials, tips, use cases, and release updates.</p>
+			</div>
+			{
+				PRODUCTS.map((product) => (
+					<div class="footer-column">
+						<h4>
+							<a href={`/${product.slug}/`}>{product.name}</a>
+						</h4>
+						<ul>
+							{SUBCATEGORIES.map((sub) => (
+								<li>
+									<a href={`/${product.slug}/${sub.slug}/`}>{sub.name}</a>
+								</li>
+							))}
+						</ul>
+					</div>
+				))
+			}
+		</div>
+		<div class="copyright">
+			&copy; {today.getFullYear()} oracleepmcloud.com. All rights reserved.
+		</div>
 	</div>
 </footer>
 <style>
 	footer {
-		padding: 2em 1em 3em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
-		color: rgb(var(--gray));
-		text-align: center;
+		background: var(--oracle-charcoal);
+		color: rgba(255, 255, 255, 0.7);
+		padding: 3em 1.5em 2em;
+		margin-top: 3em;
+	}
+	.footer-inner {
+		max-width: 1100px;
+		margin: 0 auto;
 	}
 	.footer-grid {
-		display: flex;
-		justify-content: center;
-		gap: 3em;
+		display: grid;
+		grid-template-columns: 1.5fr repeat(3, 1fr);
+		gap: 2.5em;
 		margin-bottom: 2em;
-		text-align: left;
+	}
+	.footer-brand {
+		padding-right: 1em;
+	}
+	.footer-logo {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+		font-weight: 700;
+		color: #fff;
+		font-size: 0.95em;
+		margin-bottom: 0.75em;
+	}
+	.logo-mark {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--accent);
+		color: #fff;
+		font-size: 0.75em;
+		font-weight: 700;
+		padding: 0.2em 0.5em;
+		border-radius: 4px;
+		letter-spacing: 0.05em;
+	}
+	.footer-brand p {
+		font-size: 0.85em;
+		line-height: 1.6;
+		margin: 0;
+		color: rgba(255, 255, 255, 0.5);
 	}
 	.footer-column h4 {
-		margin-bottom: 0.5em;
-		font-size: 1em;
+		font-size: 0.9em;
+		margin-bottom: 0.6em;
+		font-weight: 600;
 	}
 	.footer-column h4 a {
-		color: rgb(var(--gray-dark));
+		color: #fff;
 		text-decoration: none;
 	}
 	.footer-column ul {
@@ -54,27 +97,35 @@ const today = new Date();
 		margin: 0;
 	}
 	.footer-column li {
-		margin-bottom: 0.25em;
+		margin-bottom: 0.3em;
 	}
 	.footer-column a {
-		color: rgb(var(--gray));
+		color: rgba(255, 255, 255, 0.55);
 		text-decoration: none;
 		font-size: 0.85em;
+		transition: color 0.15s;
 	}
 	.footer-column a:hover {
-		color: var(--accent);
+		color: #fff;
 	}
 	.copyright {
-		font-size: 0.85em;
-		border-top: 1px solid rgb(var(--gray-light));
-		padding-top: 1em;
+		font-size: 0.8em;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+		padding-top: 1.25em;
+		text-align: center;
+		color: rgba(255, 255, 255, 0.4);
 	}
 	@media (max-width: 720px) {
 		.footer-grid {
-			flex-direction: column;
+			grid-template-columns: 1fr;
 			gap: 1.5em;
-			align-items: center;
 			text-align: center;
+		}
+		.footer-brand {
+			padding-right: 0;
+		}
+		.footer-logo {
+			justify-content: center;
 		}
 	}
 </style>

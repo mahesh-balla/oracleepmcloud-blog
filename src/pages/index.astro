@@ -12,10 +12,11 @@ const recentArticles = allArticles.slice(0, 6);
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
 	<section class="hero">
-		<h1>Oracle EPM Cloud Blog</h1>
+		<div class="hero-badge">Oracle EPM Cloud</div>
+		<h1>Tutorials, Tips &amp; Updates</h1>
 		<p>
-			Your go-to resource for tutorials, tips, use cases, and the latest release updates across
-			Oracle EPM Cloud products.
+			Your go-to resource for Oracle EPM Cloud product guidance — from step-by-step tutorials to
+			the latest release notes across EPM Cloud Updates, Narrative Reporting, and Planning Cloud.
 		</p>
 	</section>
 
@@ -25,11 +26,12 @@ const recentArticles = allArticles.slice(0, 6);
 			{
 				PRODUCTS.map((product) => (
 					<div class="product-card">
+						<div class="card-accent" />
 						<h3>
 							<a href={`/${product.slug}/`}>{product.name}</a>
 						</h3>
 						<p>{product.description}</p>
-						<ul>
+						<ul class="tag-list">
 							{SUBCATEGORIES.map((sub) => (
 								<li>
 									<a href={`/${product.slug}/${sub.slug}/`}>{sub.name}</a>
@@ -54,7 +56,8 @@ const recentArticles = allArticles.slice(0, 6);
 								<a href={`/${article.data.product}/${article.data.subcategory}/${article.id}/`}>
 									<span class="article-title">{article.data.title}</span>
 									<span class="article-meta">
-										{product?.name} &middot; <FormattedDate date={article.data.pubDate} />
+										<span class="article-product">{product?.name}</span>
+										<FormattedDate date={article.data.pubDate} />
 									</span>
 								</a>
 							</li>
@@ -67,26 +70,44 @@ const recentArticles = allArticles.slice(0, 6);
 </BaseLayout>
 
 <style>
+	/* Hero */
 	.hero {
 		text-align: center;
+		padding: 2em 0 2.5em;
 		margin-bottom: 2em;
+	}
+	.hero-badge {
+		display: inline-block;
+		background: var(--accent);
+		color: #fff;
+		font-size: 0.75em;
+		font-weight: 600;
+		padding: 0.3em 0.9em;
+		border-radius: 20px;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		margin-bottom: 1em;
 	}
 	.hero h1 {
-		font-size: 2.5em;
-		margin-bottom: 0.25em;
+		font-size: 2.75em;
+		margin-bottom: 0.3em;
+		color: var(--oracle-charcoal);
 	}
 	.hero p {
-		color: rgb(var(--gray));
-		font-size: 1.1em;
-		max-width: 600px;
+		color: var(--oracle-warm-gray);
+		font-size: 1.05em;
+		max-width: 640px;
 		margin: 0 auto;
+		line-height: 1.65;
 	}
+
+	/* Products */
 	.products {
-		margin-bottom: 2em;
+		margin-bottom: 3em;
 	}
 	.products h2 {
 		text-align: center;
-		margin-bottom: 1em;
+		margin-bottom: 1.25em;
 	}
 	.product-grid {
 		display: grid;
@@ -94,46 +115,68 @@ const recentArticles = allArticles.slice(0, 6);
 		gap: 1.5em;
 	}
 	.product-card {
-		border: 1px solid rgb(var(--gray-light));
-		border-radius: 8px;
-		padding: 1.5em;
-		background: white;
+		position: relative;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		padding: 1.75em 1.5em 1.5em;
+		background: var(--surface);
+		box-shadow: var(--box-shadow);
+		transition: box-shadow 0.2s, transform 0.2s;
+		overflow: hidden;
+	}
+	.product-card:hover {
+		box-shadow: var(--box-shadow-lg);
+		transform: translateY(-2px);
+	}
+	.card-accent {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 4px;
+		background: var(--accent);
 	}
 	.product-card h3 {
 		margin: 0 0 0.5em 0;
+		font-size: 1.2em;
 	}
 	.product-card h3 a {
 		text-decoration: none;
-		color: rgb(var(--black));
+		color: var(--oracle-charcoal);
 	}
 	.product-card h3 a:hover {
 		color: var(--accent);
 	}
 	.product-card p {
-		color: rgb(var(--gray));
-		font-size: 0.9em;
+		color: var(--oracle-warm-gray);
+		font-size: 0.88em;
+		line-height: 1.55;
 	}
-	.product-card ul {
+	.tag-list {
 		list-style: none;
 		padding: 0;
 		margin: 0;
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5em;
+		gap: 0.4em;
 	}
-	.product-card li a {
+	.tag-list li a {
 		display: inline-block;
-		padding: 0.25em 0.75em;
-		background: rgb(var(--gray-light));
+		padding: 0.3em 0.7em;
+		background: rgba(var(--gray-light), 0.7);
 		border-radius: 4px;
-		font-size: 0.85em;
+		font-size: 0.8em;
+		font-weight: 500;
 		text-decoration: none;
-		color: rgb(var(--gray-dark));
+		color: var(--oracle-warm-gray);
+		transition: background 0.15s, color 0.15s;
 	}
-	.product-card li a:hover {
+	.tag-list li a:hover {
 		background: var(--accent);
 		color: white;
 	}
+
+	/* Recent Articles */
 	.recent {
 		margin-bottom: 2em;
 	}
@@ -145,33 +188,58 @@ const recentArticles = allArticles.slice(0, 6);
 		list-style: none;
 		padding: 0;
 		margin: 0;
+		background: var(--surface);
+		border-radius: var(--radius-lg);
+		border: 1px solid var(--border);
+		overflow: hidden;
 	}
 	.article-list li {
-		border-bottom: 1px solid rgb(var(--gray-light));
+		border-bottom: 1px solid var(--border);
+	}
+	.article-list li:last-child {
+		border-bottom: none;
 	}
 	.article-list li a {
 		display: flex;
 		justify-content: space-between;
-		align-items: baseline;
-		padding: 0.75em 0;
+		align-items: center;
+		padding: 1em 1.25em;
 		text-decoration: none;
-		color: rgb(var(--black));
+		color: var(--oracle-charcoal);
+		transition: background 0.12s;
+	}
+	.article-list li a:hover {
+		background: rgba(var(--gray-light), 0.4);
 	}
 	.article-list li a:hover .article-title {
 		color: var(--accent);
 	}
+	.article-title {
+		font-weight: 500;
+	}
 	.article-meta {
-		color: rgb(var(--gray));
-		font-size: 0.85em;
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
+		color: var(--oracle-warm-gray);
+		font-size: 0.82em;
 		white-space: nowrap;
 		margin-left: 1em;
 	}
+	.article-product {
+		background: rgba(var(--gray-light), 0.7);
+		padding: 0.15em 0.55em;
+		border-radius: 3px;
+		font-size: 0.9em;
+		font-weight: 500;
+	}
 	@media (max-width: 720px) {
+		.hero h1 { font-size: 2em; }
 		.article-list li a {
 			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.4em;
 		}
-		.article-meta {
-			margin-left: 0;
-		}
+		.article-meta { margin-left: 0; }
 	}
 </style>

@@ -18,20 +18,21 @@ const articles = (
 	title={`${subcategory.name} - ${product.name} - Oracle EPM Cloud Blog`}
 	description={`${subcategory.description} for ${product.name}`}
 >
-	<nav class="breadcrumb">
-		<a href="/">Home</a> &rsaquo;
-		<a href={`/${product.slug}/`}>{product.name}</a> &rsaquo;
-		<span>{subcategory.name}</span>
-	</nav>
-
-	<h1>{subcategory.name}</h1>
-	<p>{subcategory.description} for {product.name}.</p>
+	<div class="page-header">
+		<nav class="breadcrumb">
+			<a href="/">Home</a> <span class="sep">/</span>
+			<a href={`/${product.slug}/`}>{product.name}</a> <span class="sep">/</span>
+			<span>{subcategory.name}</span>
+		</nav>
+		<h1>{subcategory.name}</h1>
+		<p>{subcategory.description} for {product.name}.</p>
+	</div>
 
 	<nav class="subcategory-nav">
 		{SUBCATEGORIES.map((sub) => (
 			<a
 				href={`/${product.slug}/${sub.slug}/`}
-				class:list={[{ active: sub.slug === subcategory.slug }]}
+				class:list={['sub-pill', { active: sub.slug === subcategory.slug }]}
 			>
 				{sub.name}
 			</a>
@@ -52,69 +53,54 @@ const articles = (
 			))}
 		</ul>
 	) : (
-		<p class="empty">No articles yet in this category. Check back soon!</p>
+		<div class="empty-state">
+			<p>No articles yet in this category. Check back soon!</p>
+		</div>
 	)}
 </BaseLayout>
 
 <style>
-	.breadcrumb {
-		margin-bottom: 1em;
-		font-size: 0.9em;
-		color: rgb(var(--gray));
+	.page-header { margin-bottom: 1.5em; }
+	.breadcrumb { font-size: 0.85em; color: var(--oracle-warm-gray); margin-bottom: 0.75em; }
+	.breadcrumb a { color: var(--accent); text-decoration: none; }
+	.breadcrumb a:hover { text-decoration: underline; }
+	.breadcrumb .sep { margin: 0 0.35em; opacity: 0.4; }
+	.page-header p { color: var(--oracle-warm-gray); font-size: 1em; margin-top: 0.25em; }
+	.subcategory-nav { display: flex; flex-wrap: wrap; gap: 0.5em; margin-bottom: 2em; }
+	.sub-pill {
+		display: inline-block; padding: 0.45em 1em; background: var(--surface);
+		border: 1px solid var(--border); border-radius: 20px; text-decoration: none;
+		color: var(--oracle-warm-gray); font-size: 0.88em; font-weight: 500;
+		transition: all 0.15s;
 	}
-	.breadcrumb a {
-		color: var(--accent);
-		text-decoration: none;
-	}
-	.breadcrumb a:hover {
-		text-decoration: underline;
-	}
-	.subcategory-nav {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5em;
-		margin: 1.5em 0;
-	}
-	.subcategory-nav a {
-		display: inline-block;
-		padding: 0.4em 1em;
-		background: rgb(var(--gray-light));
-		border-radius: 4px;
-		text-decoration: none;
-		color: rgb(var(--gray-dark));
-		font-size: 0.9em;
-	}
-	.subcategory-nav a:hover,
-	.subcategory-nav a.active {
-		background: var(--accent);
-		color: white;
+	.sub-pill:hover, .sub-pill.active {
+		background: var(--accent); color: #fff; border-color: var(--accent);
 	}
 	.article-list {
-		list-style: none;
-		padding: 0;
+		list-style: none; padding: 0; margin: 0; background: var(--surface);
+		border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden;
 	}
-	.article-list li {
-		border-bottom: 1px solid rgb(var(--gray-light));
-	}
+	.article-list li { border-bottom: 1px solid var(--border); }
+	.article-list li:last-child { border-bottom: none; }
 	.article-list li a {
-		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
-		padding: 0.75em 0;
-		text-decoration: none;
-		color: rgb(var(--black));
+		display: flex; justify-content: space-between; align-items: center;
+		padding: 1em 1.25em; text-decoration: none; color: var(--oracle-charcoal);
+		transition: background 0.12s;
 	}
-	.article-list li a:hover .article-title {
-		color: var(--accent);
-	}
+	.article-list li a:hover { background: rgba(var(--gray-light), 0.4); }
+	.article-list li a:hover .article-title { color: var(--accent); }
+	.article-title { font-weight: 500; }
 	.article-meta {
-		color: rgb(var(--gray));
-		font-size: 0.85em;
-		white-space: nowrap;
-		margin-left: 1em;
+		color: var(--oracle-warm-gray); font-size: 0.82em;
+		white-space: nowrap; margin-left: 1em;
 	}
-	.empty {
-		color: rgb(var(--gray));
-		font-style: italic;
+	.empty-state {
+		text-align: center; padding: 3em 1em; background: var(--surface);
+		border-radius: var(--radius-lg); border: 1px solid var(--border);
+		color: var(--oracle-warm-gray); font-style: italic;
+	}
+	@media (max-width: 720px) {
+		.article-list li a { flex-direction: column; align-items: flex-start; gap: 0.4em; }
+		.article-meta { margin-left: 0; }
 	}
 </style>
