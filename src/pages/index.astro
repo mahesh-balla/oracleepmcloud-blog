@@ -11,6 +11,10 @@ const recentArticles = allArticles.slice(0, 6);
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<div class="hero-banner">
+		<img src="/epm-hero-banner.svg" alt="Enterprise Performance Management — Financial Planning & Analysis, Consolidation, Reporting, Close Management" width="1440" height="320" />
+	</div>
+
 	<section class="hero">
 		<div class="hero-badge">Oracle EPM Cloud</div>
 		<h1>Tutorials, Tips &amp; Updates</h1>
@@ -70,6 +74,28 @@ const recentArticles = allArticles.slice(0, 6);
 </BaseLayout>
 
 <style>
+	/* Hero Banner */
+	.hero-banner {
+		width: 100vw;
+		position: relative;
+		left: 50%;
+		right: 50%;
+		margin-left: -50vw;
+		margin-right: -50vw;
+		margin-top: -2.5em;
+		margin-bottom: 0;
+		line-height: 0;
+		overflow: hidden;
+	}
+	.hero-banner img {
+		width: 100%;
+		height: auto;
+		max-height: 320px;
+		object-fit: cover;
+		display: block;
+		border-radius: 0;
+	}
+
 	/* Hero */
 	.hero {
 		text-align: center;
