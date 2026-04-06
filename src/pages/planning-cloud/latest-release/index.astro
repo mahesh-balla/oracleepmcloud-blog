@@ -1,0 +1,120 @@
+---
+import { getCollection } from 'astro:content';
+import FormattedDate from '../../../components/FormattedDate.astro';
+import { PRODUCTS, SUBCATEGORIES } from '../../../consts';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+const product = PRODUCTS.find((p) => p.slug === 'planning-cloud')!;
+const subcategory = SUBCATEGORIES.find((s) => s.slug === 'latest-release')!;
+const articles = (
+	await getCollection(
+		'articles',
+		({ data }) => data.product === 'planning-cloud' && data.subcategory === 'latest-release',
+	)
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout
+	title={`${subcategory.name} - ${product.name} - Oracle EPM Cloud Blog`}
+	description={`${subcategory.description} for ${product.name}`}
+>
+	<nav class="breadcrumb">
+		<a href="/">Home</a> &rsaquo;
+		<a href={`/${product.slug}/`}>{product.name}</a> &rsaquo;
+		<span>{subcategory.name}</span>
+	</nav>
+
+	<h1>{subcategory.name}</h1>
+	<p>{subcategory.description} for {product.name}.</p>
+
+	<nav class="subcategory-nav">
+		{SUBCATEGORIES.map((sub) => (
+			<a
+				href={`/${product.slug}/${sub.slug}/`}
+				class:list={[{ active: sub.slug === subcategory.slug }]}
+			>
+				{sub.name}
+			</a>
+		))}
+	</nav>
+
+	{articles.length > 0 ? (
+		<ul class="article-list">
+			{articles.map((article) => (
+				<li>
+					<a href={`/${product.slug}/${subcategory.slug}/${article.id}/`}>
+						<span class="article-title">{article.data.title}</span>
+						<span class="article-meta">
+							<FormattedDate date={article.data.pubDate} />
+						</span>
+					</a>
+				</li>
+			))}
+		</ul>
+	) : (
+		<p class="empty">No articles yet in this category. Check back soon!</p>
+	)}
+</BaseLayout>
+
+<style>
+	.breadcrumb {
+		margin-bottom: 1em;
+		font-size: 0.9em;
+		color: rgb(var(--gray));
+	}
+	.breadcrumb a {
+		color: var(--accent);
+		text-decoration: none;
+	}
+	.breadcrumb a:hover {
+		text-decoration: underline;
+	}
+	.subcategory-nav {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		margin: 1.5em 0;
+	}
+	.subcategory-nav a {
+		display: inline-block;
+		padding: 0.4em 1em;
+		background: rgb(var(--gray-light));
+		border-radius: 4px;
+		text-decoration: none;
+		color: rgb(var(--gray-dark));
+		font-size: 0.9em;
+	}
+	.subcategory-nav a:hover,
+	.subcategory-nav a.active {
+		background: var(--accent);
+		color: white;
+	}
+	.article-list {
+		list-style: none;
+		padding: 0;
+	}
+	.article-list li {
+		border-bottom: 1px solid rgb(var(--gray-light));
+	}
+	.article-list li a {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		padding: 0.75em 0;
+		text-decoration: none;
+		color: rgb(var(--black));
+	}
+	.article-list li a:hover .article-title {
+		color: var(--accent);
+	}
+	.article-meta {
+		color: rgb(var(--gray));
+		font-size: 0.85em;
+		white-space: nowrap;
+		margin-left: 1em;
+	}
+	.empty {
+		color: rgb(var(--gray));
+		font-style: italic;
+	}
+</style>

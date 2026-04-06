@@ -1,49 +1,177 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+import { PRODUCTS, SITE_DESCRIPTION, SITE_TITLE, SUBCATEGORIES } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const allArticles = (await getCollection('articles')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const recentArticles = allArticles.slice(0, 6);
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<section class="hero">
+		<h1>Oracle EPM Cloud Blog</h1>
+		<p>
+			Your go-to resource for tutorials, tips, use cases, and the latest release updates across
+			Oracle EPM Cloud products.
+		</p>
+	</section>
+
+	<section class="products">
+		<h2>Explore by Product</h2>
+		<div class="product-grid">
+			{
+				PRODUCTS.map((product) => (
+					<div class="product-card">
+						<h3>
+							<a href={`/${product.slug}/`}>{product.name}</a>
+						</h3>
+						<p>{product.description}</p>
+						<ul>
+							{SUBCATEGORIES.map((sub) => (
+								<li>
+									<a href={`/${product.slug}/${sub.slug}/`}>{sub.name}</a>
+								</li>
+							))}
+						</ul>
+					</div>
+				))
+			}
+		</div>
+	</section>
+
+	{
+		recentArticles.length > 0 && (
+			<section class="recent">
+				<h2>Recent Articles</h2>
+				<ul class="article-list">
+					{recentArticles.map((article) => {
+						const product = PRODUCTS.find((p) => p.slug === article.data.product);
+						return (
+							<li>
+								<a href={`/${article.data.product}/${article.data.subcategory}/${article.id}/`}>
+									<span class="article-title">{article.data.title}</span>
+									<span class="article-meta">
+										{product?.name} &middot; <FormattedDate date={article.data.pubDate} />
+									</span>
+								</a>
+							</li>
+						);
+					})}
+				</ul>
+			</section>
+		)
+	}
+</BaseLayout>
+
+<style>
+	.hero {
+		text-align: center;
+		margin-bottom: 2em;
+	}
+	.hero h1 {
+		font-size: 2.5em;
+		margin-bottom: 0.25em;
+	}
+	.hero p {
+		color: rgb(var(--gray));
+		font-size: 1.1em;
+		max-width: 600px;
+		margin: 0 auto;
+	}
+	.products {
+		margin-bottom: 2em;
+	}
+	.products h2 {
+		text-align: center;
+		margin-bottom: 1em;
+	}
+	.product-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 1.5em;
+	}
+	.product-card {
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 8px;
+		padding: 1.5em;
+		background: white;
+	}
+	.product-card h3 {
+		margin: 0 0 0.5em 0;
+	}
+	.product-card h3 a {
+		text-decoration: none;
+		color: rgb(var(--black));
+	}
+	.product-card h3 a:hover {
+		color: var(--accent);
+	}
+	.product-card p {
+		color: rgb(var(--gray));
+		font-size: 0.9em;
+	}
+	.product-card ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+	}
+	.product-card li a {
+		display: inline-block;
+		padding: 0.25em 0.75em;
+		background: rgb(var(--gray-light));
+		border-radius: 4px;
+		font-size: 0.85em;
+		text-decoration: none;
+		color: rgb(var(--gray-dark));
+	}
+	.product-card li a:hover {
+		background: var(--accent);
+		color: white;
+	}
+	.recent {
+		margin-bottom: 2em;
+	}
+	.recent h2 {
+		text-align: center;
+		margin-bottom: 1em;
+	}
+	.article-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	.article-list li {
+		border-bottom: 1px solid rgb(var(--gray-light));
+	}
+	.article-list li a {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		padding: 0.75em 0;
+		text-decoration: none;
+		color: rgb(var(--black));
+	}
+	.article-list li a:hover .article-title {
+		color: var(--accent);
+	}
+	.article-meta {
+		color: rgb(var(--gray));
+		font-size: 0.85em;
+		white-space: nowrap;
+		margin-left: 1em;
+	}
+	@media (max-width: 720px) {
+		.article-list li a {
+			flex-direction: column;
+		}
+		.article-meta {
+			margin-left: 0;
+		}
+	}
+</style>
